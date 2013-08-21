@@ -10,7 +10,6 @@ module CarrierWave
         @callbacks = options[:callbacks] || {}
         @logger = options[:logger]
         @unparsed = options
-        @progress = options[:progress]
 
         @format_options = defaults.merge(options)
       end
@@ -21,10 +20,6 @@ module CarrierWave
 
       def logger(model)
         model.send(@logger) if @logger.present?
-      end
-
-      def progress(model)
-        lambda {|val| model.send(@progress, val)}
       end
 
       def encoder_options

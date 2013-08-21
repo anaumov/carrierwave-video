@@ -53,16 +53,8 @@ module CarrierWave
 
       yield(file, @options.format_options) if block_given?
 
-      progress = @options.progress(model)
-
       with_trancoding_callbacks do
-        if progress
-          file.transcode(tmp_path, @options.format_params, @options.encoder_options) {
-              |value| progress.call(value)
-          }
-        else
-          file.transcode(tmp_path, @options.format_params, @options.encoder_options)
-        end
+        file.transcode(tmp_path, @options.format_params, @options.encoder_options)
         File.rename tmp_path, current_path
       end
     end
