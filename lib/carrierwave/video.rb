@@ -68,7 +68,7 @@ module CarrierWave
           setup_logger
           block.call
           send_callback(callbacks[:after_transcode])
-        rescue => e
+        rescue Exception => e
           send_callback(callbacks[:rescue])
 
           if logger
@@ -78,7 +78,10 @@ module CarrierWave
             end
           end
 
-          raise CarrierWave::ProcessingError.new("Failed to transcode with FFmpeg. Check ffmpeg install and verify video is not corrupt or cut short. Original error: #{e}")
+          Rails.logger.error e
+          Airbrake.notify e
+
+          raise CarrierWave::ProcessingError.new("Original error: #{e}")
         ensure
           reset_logger
           send_callback(callbacks[:ensure])
