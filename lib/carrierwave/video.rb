@@ -64,11 +64,13 @@ module CarrierWave
         callbacks = @options.callbacks
         logger = @options.logger(model)
         begin
+          logger.info('once start')
           send_callback(callbacks[:before_transcode])
           setup_logger
           block.call
           send_callback(callbacks[:after_transcode])
         rescue Exception => e
+          logger.info('exception')
           send_callback(callbacks[:rescue])
 
           if logger
